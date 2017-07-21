@@ -1,0 +1,9 @@
+.tree__node {
+    padding-left: 12px;
+}
+
+.tree__expander {
+    display: inline-block;
+    width: 12px;
+    background-color: lightgray;
+}
