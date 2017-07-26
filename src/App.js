@@ -31,6 +31,13 @@ const nodes = {
     ]
 };
 
+function mySuperNode(node, { isExpanded, isSelected }) {
+    return (<div style={{display: 'inline-block'}}>
+        {isExpanded && <span style={{color: 'red'}}>HA</span>}
+        <span>{node.title}</span>
+    </div>);
+}
+
 class App extends Component {
 
     constructor(props) {
@@ -58,6 +65,14 @@ class App extends Component {
                       expandedNodes={this.state.expandedNodes}
                       onExpandedNodesChanged={this._handleExpandedNodesChanged}
                       onSelectedNodesChanged={this._handleSelectedNodesChanged}
+                />
+
+                <Tree nodes={this.state.nodes}
+                      selectedNodes={this.state.selectedNodes}
+                      expandedNodes={this.state.expandedNodes}
+                      onExpandedNodesChanged={this._handleExpandedNodesChanged}
+                      onSelectedNodesChanged={this._handleSelectedNodesChanged}
+                      renderNodeContent={mySuperNode}
                 />
             </div>
         );

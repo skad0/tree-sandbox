@@ -5,19 +5,27 @@ import Checkbox from './Checkbox';
 
 import './Tree.css';
 
+function helperKakoyto(elementsArray, element) {
+    return elementsArray.includes(element)
+        ? _.without(elementsArray, element)
+        : _.union(elementsArray, [element]);
+}
+
+function RenderNodeContent(node) {
+    return <span>{node.title}</span>;
+}
+
 export default class Tree extends Component {
 
-    _helperKakoyto(elementsArray, element) {
-        return elementsArray.includes(element)
-            ? _.without(elementsArray, element)
-            : _.union(elementsArray, [element]);
-    }
+    static defaultProps = {
+        renderNodeContent: RenderNodeContent
+    };
 
     _handleExpanderClick = (e) => {
         const nodeId = Number(e.target.dataset.nodeId);
 
         this.props.onExpandedNodesChanged(
-            this._helperKakoyto(this.props.expandedNodes, nodeId)
+            helperKakoyto(this.props.expandedNodes, nodeId)
         );
     }
 
@@ -25,11 +33,13 @@ export default class Tree extends Component {
         const nodeId = Number(e.target.value);
 
         this.props.onSelectedNodesChanged(
-            this._helperKakoyto(this.props.selectedNodes, nodeId)
+            helperKakoyto(this.props.selectedNodes, nodeId)
         );
     }
 
-    _renderNode({id, title, children}) {
+    _renderNode(node) {
+        const {id, children} = node;
+        const isSelected = this.props.selectedNodes.includes(id);
         const isExpanded = this.props.expandedNodes.includes(id);
         const isExpandable = children.length > 0;
         const nodeDataAttrs = {
@@ -42,9 +52,9 @@ export default class Tree extends Component {
             </div>
             <Checkbox
                 value={id}
-                checked={this.props.selectedNodes.includes(id)}
+                checked={isSelected}
                 onChange={this._handleNodeCheckChange} />
-            <span>{title}</span>
+            {this.props.renderNodeContent(node, { isSelected, isExpanded })}
             {isExpanded && children.map(child => this._renderNode(child))}
         </div>;
     }
