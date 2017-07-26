@@ -46,14 +46,18 @@ class App extends Component {
         this.setState({expandedNodes});
     }
 
+    _handleSelectedNodesChanged = (selectedNodes) => {
+        this.setState({selectedNodes});
+    }
+
     render() {
         return (
             <div>
-
                 <Tree nodes={this.state.nodes}
                       selectedNodes={this.state.selectedNodes}
                       expandedNodes={this.state.expandedNodes}
                       onExpandedNodesChanged={this._handleExpandedNodesChanged}
+                      onSelectedNodesChanged={this._handleSelectedNodesChanged}
                 />
             </div>
         );

@@ -1,20 +1,32 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
+
+import Checkbox from './Checkbox';
+
 import './Tree.css';
 
 export default class Tree extends Component {
 
-    constructor(props) {
-        super(props);
+    _helperKakoyto(elementsArray, element) {
+        return elementsArray.includes(element)
+            ? _.without(elementsArray, element)
+            : _.union(elementsArray, [element]);
     }
 
-    handleExpanderClick = (e) => {
+    _handleExpanderClick = (e) => {
         const nodeId = Number(e.target.dataset.nodeId);
-        const wasExpanded = this.props.expandedNodes.includes(nodeId);
-        const expandedNodes = wasExpanded
-            ? _.without(this.props.expandedNodes, nodeId)
-            : _.union(this.props.expandedNodes, [nodeId]);
-        this.props.onExpandedNodesChanged(expandedNodes);
+
+        this.props.onExpandedNodesChanged(
+            this._helperKakoyto(this.props.expandedNodes, nodeId)
+        );
+    }
+
+    _handleNodeCheckChange = (e) => {
+        const nodeId = Number(e.target.value);
+
+        this.props.onSelectedNodesChanged(
+            this._helperKakoyto(this.props.selectedNodes, nodeId)
+        );
     }
 
     _renderNode({id, title, children}) {
@@ -25,9 +37,13 @@ export default class Tree extends Component {
         };
 
         return <div className="tree__node" key={id}>
-            <div className="tree__expander" onClick={this.handleExpanderClick} {...nodeDataAttrs}>
+            <div className="tree__expander" onClick={this._handleExpanderClick} {...nodeDataAttrs}>
                 {isExpandable && (isExpanded ? '-' : '+')}
             </div>
+            <Checkbox
+                value={id}
+                checked={this.props.selectedNodes.includes(id)}
+                onChange={this._handleNodeCheckChange} />
             <span>{title}</span>
             {isExpanded && children.map(child => this._renderNode(child))}
         </div>;
