@@ -8,16 +8,19 @@ const nodes = {
     id: 1,
     title: 'Root node',
     payload: {},
+    folder: true,
     children: [
         {
             id: 2,
             title: 'First Child',
             payload: {},
+            folder: true,
             children: [
                 {
                     id: 5,
                     title: 'Grand Child',
                     payload: {},
+                    folder: false,
                     children: []
                 }
             ]
@@ -65,14 +68,6 @@ class App extends Component {
                       expandedNodes={this.state.expandedNodes}
                       onExpandedNodesChanged={this._handleExpandedNodesChanged}
                       onSelectedNodesChanged={this._handleSelectedNodesChanged}
-                />
-
-                <Tree nodes={this.state.nodes}
-                      selectedNodes={this.state.selectedNodes}
-                      expandedNodes={this.state.expandedNodes}
-                      onExpandedNodesChanged={this._handleExpandedNodesChanged}
-                      onSelectedNodesChanged={this._handleSelectedNodesChanged}
-                      renderNodeContent={mySuperNode}
                 />
             </div>
         );

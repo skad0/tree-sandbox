@@ -11,6 +11,37 @@ function helperKakoyto(elementsArray, element) {
         : _.union(elementsArray, [element]);
 }
 
+function findNodeDescendants(nodeId, tree) {
+    const start = findStartNode(tree, nodeId);
+
+    return collectDescendantIds(start.children);
+}
+
+function collectDescendantIds(children) {
+    return _.flatten(
+        (children || [])
+            .map(child => [child.id, ...collectDescendantIds(child.children)])
+    );
+}
+
+function findStartNode(tree, nodeId) {
+    if (tree.id === nodeId) {
+        return tree;
+    } else {
+        let result = null;
+        (tree.children || []).some(child => {
+            const foundNode = findStartNode(child, nodeId);
+            if(foundNode !== null) {
+                result = foundNode;
+
+                return true;
+            }
+        });
+
+        return result;
+    }
+}
+
 function RenderNodeContent(node) {
     return <span>{node.title}</span>;
 }
@@ -31,10 +62,13 @@ export default class Tree extends Component {
 
     _handleNodeCheckChange = (e) => {
         const nodeId = Number(e.target.value);
+        const descendants = findNodeDescendants(nodeId, this.props.nodes);
+        const wasChecked = _.includes(this.props.selectedNodes, nodeId);
+        const newSelectedNodes = wasChecked
+            ? _.without(this.props.selectedNodes, ...descendants, nodeId)
+            : _.union(this.props.selectedNodes, descendants, [nodeId]);
 
-        this.props.onSelectedNodesChanged(
-            helperKakoyto(this.props.selectedNodes, nodeId)
-        );
+        this.props.onSelectedNodesChanged(newSelectedNodes);
     }
 
     _renderNode(node) {
@@ -54,6 +88,7 @@ export default class Tree extends Component {
                 value={id}
                 checked={isSelected}
                 onChange={this._handleNodeCheckChange} />
+            {(node.folder === true) && '(F)'}
             {this.props.renderNodeContent(node, { isSelected, isExpanded })}
             {isExpanded && children.map(child => this._renderNode(child))}
         </div>;
