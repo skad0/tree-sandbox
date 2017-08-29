@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 
-import Checkbox from './Checkbox';
+import Checkbox from './TreeCheckbox';
 
 import './Tree.css';
 
@@ -60,8 +60,8 @@ export default class Tree extends Component {
         );
     }
 
-    _handleNodeCheckChange = (e) => {
-        const nodeId = Number(e.target.value);
+    _handleNodeCheckChange = (e, value) => {
+        const nodeId = Number(value);
         const descendants = findNodeDescendants(nodeId, this.props.nodes);
         const wasChecked = _.includes(this.props.selectedNodes, nodeId);
         const newSelectedNodes = wasChecked
@@ -79,6 +79,7 @@ export default class Tree extends Component {
         const nodeDataAttrs = {
             'data-node-id': id
         };
+        const status = isSelected ? 'checked' : 'unchecked';
 
         return <div className="tree__node" key={id}>
             <div className="tree__expander" onClick={this._handleExpanderClick} {...nodeDataAttrs}>
@@ -87,10 +88,12 @@ export default class Tree extends Component {
             <Checkbox
                 value={id}
                 checked={isSelected}
-                onChange={this._handleNodeCheckChange} />
-            {(node.folder === true) && '(F)'}
-            {this.props.renderNodeContent(node, { isSelected, isExpanded })}
-            {isExpanded && children.map(child => this._renderNode(child))}
+                status={status}
+                onChange={this._handleNodeCheckChange}>
+                    {(node.folder === true) && '(F)'}
+                    {this.props.renderNodeContent(node, { isSelected, isExpanded })}
+                    {isExpanded && children.map(child => this._renderNode(child))}
+            </Checkbox>
         </div>;
     }
 

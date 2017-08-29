@@ -4,6 +4,10 @@
 
 .tree__expander {
     display: inline-block;
+
     width: 12px;
+
+    margin-right: 5px;
+
     background-color: lightgray;
 }
