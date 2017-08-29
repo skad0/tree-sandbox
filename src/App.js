@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-// import './App.css';
+
+import './App.css';
 
 import Tree from './Tree';
 
@@ -62,7 +62,7 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className="App">
                 <Tree nodes={this.state.nodes}
                       selectedNodes={this.state.selectedNodes}
                       expandedNodes={this.state.expandedNodes}
