@@ -29,6 +29,7 @@ const nodes = {
             id: 3,
             title: 'Second Child',
             payload: {},
+            folder: false,
             children: []
         }
     ]
