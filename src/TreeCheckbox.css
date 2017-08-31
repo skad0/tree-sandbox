@@ -3,34 +3,29 @@
 
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
-    &_partly-checked {
-        .tree-checkbox__box {
-            &::before {
-                border: 2px solid #fff;
+    &_partly-checked > .tree-checkbox__box {
+        &::before {
+            border: 2px solid #fff;
 
-                background: rgb(154, 188, 220);
-            }
+            background: rgb(154, 188, 220);
         }
     }
 
-    &_checked {
-        .tree-checkbox__box {
-            &::before {
-                background: rgb(230, 242, 253);
-            }
+    &_checked > .tree-checkbox__box {
+        &::before {
+            background: rgb(230, 242, 253);
+        }
 
-            &::after {
-                visibility: visible;
-                opacity: 1;
-            }
+        &::after {
+            visibility: visible;
+            opacity: 1;
         }
     }
 
-    &_unchecked {
-        .tree-checkbox__box {
-            &::before {
-                background: #fff;
-            }
+
+    &_unchecked > .tree-checkbox__box {
+        &::before {
+            background: #fff;
         }
     }
 
