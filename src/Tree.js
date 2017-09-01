@@ -26,10 +26,6 @@ export default class Tree extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            flatTree: this._buildTree(props.nodes, [])
-        };
-
         this._renderFlatNode = this._renderFlatNode.bind(this);
     }
 
@@ -66,7 +62,7 @@ export default class Tree extends Component {
     _handleNodeCheckChange = (e, value) => {
         const nodeId = Number(value);
         const selectedNodes = this.props.selectedNodes;
-        const descedants = findDescedants(nodeId, this.state.flatTree).map(node => node.id);
+        const descedants = findDescedants(nodeId, this.props.nodes).map(node => node.id);
 
         this.props.onSelectedNodesChanged(
             _.includes(selectedNodes, nodeId) ?
@@ -108,12 +104,12 @@ export default class Tree extends Component {
      * @returns {Array}
      */
     _getNodeChildren(node) {
-        return this.state.flatTree.filter(n => n.parentId === node.id);
+        return this.props.nodes.filter(n => n.parentId === node.id);
     }
 
     render() {
         return <div>
-            {this.state.flatTree.filter(node => !node.parentId).map(this._renderFlatNode)}
+            {this.props.nodes.filter(node => !node.parentId).map(this._renderFlatNode)}
         </div>;
     }
 }

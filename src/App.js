@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Tree from './Tree';
+import flatten from './helpers/flattenTree';
 
 const nodes = {
     id: 1,
@@ -47,7 +48,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            nodes: nodes,
+            nodes: flatten(nodes),
             selectedNodes: [],
             expandedNodes: []
         };
