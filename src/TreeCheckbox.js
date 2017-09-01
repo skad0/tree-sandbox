@@ -10,7 +10,7 @@ const STATUS = {
 
 export default class TreeCheckbox extends Component {
     constructor(props) {
-        super(...props);
+        super(props);
 
         this._handleClick = this._handleClick.bind(this);
     }
