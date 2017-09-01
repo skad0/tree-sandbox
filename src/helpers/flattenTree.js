@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-module.exports = (node, options = {}) => {
+module.exports = function flattenTree(node, options = {}) {
     _.defaults(options, {
         payloadField: 'payload',
         childrenField: 'children'
