@@ -1,6 +1,6 @@
-const assert = require('assert');
-const flatten = require('./flattenTree');
-// TODO: write tests with infrastucture
+import flatten from './flattenTree';
+import _ from 'lodash';
+
 const commonTree = {
     id: 1,
     title: 'Root node',
@@ -8,30 +8,18 @@ const commonTree = {
     folder: true,
     children: [
         {
-            id: 2,
-            title: 'First Child',
-            payload: {},
-            folder: true,
-            children: [
-                {
-                    id: 5,
-                    title: 'Grand Child',
-                    payload: {},
-                    folder: false,
-                    children: []
-                }
-            ]
-        },
-        {
             id: 3,
             title: 'Second Child',
             payload: { chmod: '777' },
             owner: 'admin',
-            folder: false,
-            children: []
+            folder: false
         }
     ]
 };
+const customChildren = Object.assign(
+    _.omit(commonTree, ['children']),
+    { descedants: [].concat(commonTree.children) }
+);
 const commonResult = [
     {
         id: 1,
@@ -41,20 +29,6 @@ const commonResult = [
         expandable: true,
         payload: {}
     },
-    {
-        id: 2,
-        title: 'First Child',
-        folder: true,
-        parentId: 1,
-        expandable: true,
-        payload: {} },
-    {
-        id: 5,
-        title: 'Grand Child',
-        folder: false,
-        parentId: 2,
-        expandable: false,
-        payload: {} },
     {
         id: 3,
         title: 'Second Child',
@@ -82,9 +56,31 @@ const customPayloadResult = [
     }
 ];
 
-assert.deepEqual(flatten(commonTree), commonResult, 'should correctly build list with correct payloads');
-assert.deepEqual(
-    flatten(customPayload, { payloadField: 'additional' }),
-    customPayloadResult,
-    'should correctly process custom payload field'
-);
+const tests = [
+    {
+        input: commonTree,
+        expected: commonResult,
+        message: 'should correctly build list with correct payloads',
+        options: {}
+    },
+    {
+        input: customPayload,
+        expected: customPayloadResult,
+        message: 'should correctly process custom payload field',
+        options: { payloadField: 'additional' }
+    },
+    {
+        input: customChildren,
+        expected: commonResult,
+        message: 'should correctly process custom children field',
+        options: { childrenField: 'descedants' }
+    }
+];
+
+describe('flattenTree', function() {
+    tests.forEach(t => {
+        it(t.message, function() {
+            expect(flatten(t.input, t.options)).toEqual(t.expected);
+        });
+    });
+});
