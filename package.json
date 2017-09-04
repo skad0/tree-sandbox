@@ -91,6 +91,7 @@
   },
   "devDependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "eslint": "^3.19.0",
     "postcss-nested": "^2.1.2"
   }
 }
