@@ -9,6 +9,10 @@ const STATUS = {
 };
 
 export default class TreeCheckbox extends Component {
+    static defaultProps = {
+        size: 's'
+    };
+
     constructor(props) {
         super(props);
 
@@ -23,7 +27,7 @@ export default class TreeCheckbox extends Component {
 
     render() {
         const inputChecked = [STATUS.checked, STATUS.partlyChecked].includes(this.props.status);
-        const size = this.props.size || 's';
+        const size = this.props.size;
 
         return <label
             className={`tree-checkbox tree-checkbox_size_${size} tree-checkbox_${this.props.status}`}>
